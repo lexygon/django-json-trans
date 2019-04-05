@@ -1,0 +1,51 @@
+{% extends 'admin/change_form.html' %}
+{% load i18n admin_modify %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <style type="text/css">
+    .hvad-language-tabs span, .nani-language-tabs span {
+      display: inline-block;
+      padding: 5px 15px;
+      border: 1px solid #ccc;
+      border-bottom: none;
+      position: relative;
+      left: 0px;
+      top: 1px;
+      font-weight: bold;
+    }
+
+    .hvad-language-tabs span.current, .nani-language-tabs span.current {
+      border-bottom: 1px solid #fff;
+    }
+
+    .hvad-language-tabs span.empty, .nani-language-tabs span.empty {
+      opacity: 0.7;
+      font-weight: normal;
+    }
+
+    .hvad-language-tabs a.deletelink, .nani-language-tabs a.deletelink {
+      right: -17px;
+      bottom: 4px;
+      position: relative;
+    }
+  </style>
+{% endblock %}
+
+{% block object-tools %}
+  {{ block.super }}
+  <div class="hvad-language-tabs nani-language-tabs">
+    {% for code, lang in LANGUAGES %}
+      {% if LANGUAGE_CODE == code %}
+        <span class="current">{{ lang }}{% if current_is_translated and allow_deletion %}
+          <a class="deletelink" href="{{ del_url }}"
+             title="{% trans 'Delete Translation' %}">&nbsp;</a>{% endif %}</span>
+      {% else %}
+        <span class=""><a href="?lang={{ code }}">{{ lang }}</a>
+          {% if status == 'available' and allow_deletion %}<a class="deletelink" href="{{ del_url }}"
+                                                              title="{% trans 'Delete Translation' %}">&nbsp;</a>{% endif %}</span>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endblock %}
